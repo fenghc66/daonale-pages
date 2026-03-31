@@ -3,37 +3,385 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DaoNaLe - Family Location Sharing</title>
+    <title>DaoNaLe — Family Location, One Tap Away</title>
+    <meta name="description" content="Real-time location sharing for families and teams. Battery-friendly. Privacy-first. Works worldwide.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        header { text-align: center; padding: 60px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        header h1 { font-size: 2.5em; margin-bottom: 10px; }
-        header p { font-size: 1.2em; opacity: 0.9; }
-        .links { display: flex; justify-content: center; gap: 20px; padding: 40px 20px; flex-wrap: wrap; }
-        .links a { display: inline-block; padding: 15px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 8px; font-size: 1.1em; transition: background 0.3s; }
-        .links a:hover { background: #764ba2; }
-        .lang-switch { text-align: center; padding: 10px; font-size: 0.9em; color: #666; }
-        .lang-switch a { color: #667eea; text-decoration: none; }
-        footer { text-align: center; padding: 30px; color: #999; font-size: 0.85em; border-top: 1px solid #eee; margin-top: 40px; }
+        body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1A1A2E; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        a { text-decoration: none; color: inherit; }
+
+        /* ── Header ── */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; background: #fff; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); background: rgba(255,255,255,0.92); }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #667EEA, #764BA2); display: flex; align-items: center; justify-content: center; }
+        .logo-icon svg { width: 20px; height: 20px; color: #fff; }
+        .logo-text { font-size: 22px; font-weight: 700; color: #1A1A2E; letter-spacing: -0.5px; }
+        .nav { display: flex; align-items: center; gap: 32px; }
+        .nav a { font-size: 15px; font-weight: 500; color: #555570; transition: color 0.2s; }
+        .nav a:hover { color: #667EEA; }
+        .nav .btn-download { padding: 10px 24px; border-radius: 20px; background: linear-gradient(135deg, #667EEA, #764BA2); color: #fff; font-weight: 600; font-size: 14px; transition: transform 0.2s, box-shadow 0.2s; }
+        .nav .btn-download:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(102,126,234,0.4); }
+
+        /* ── Hero ── */
+        .hero { display: flex; flex-direction: column; align-items: center; padding: 80px 120px; gap: 32px; background: linear-gradient(180deg, #F8F9FF 0%, #EEF0FF 50%, #F0E6FF 100%); }
+        .hero-badge { display: flex; align-items: center; gap: 8px; padding: 8px 20px; border-radius: 20px; background: #fff; border: 1px solid #E0E0F0; box-shadow: 0 2px 8px rgba(102,126,234,0.08); }
+        .hero-badge-dot { width: 8px; height: 8px; border-radius: 50%; background: #32D583; }
+        .hero-badge span { font-size: 13px; font-weight: 600; color: #667EEA; }
+        .hero h1 { font-size: 56px; font-weight: 700; text-align: center; letter-spacing: -1.5px; line-height: 1.15; max-width: 800px; }
+        .hero p.subtitle { font-size: 20px; color: #555570; text-align: center; max-width: 600px; line-height: 1.6; }
+        .hero-ctas { display: flex; gap: 16px; align-items: center; }
+        .btn-primary { display: flex; align-items: center; gap: 10px; padding: 16px 36px; border-radius: 28px; background: linear-gradient(135deg, #667EEA, #764BA2); color: #fff; font-weight: 600; font-size: 17px; box-shadow: 0 8px 24px rgba(102,126,234,0.4); transition: transform 0.2s, box-shadow 0.2s; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(102,126,234,0.5); }
+        .btn-primary svg { width: 18px; height: 18px; }
+        .btn-secondary { display: flex; align-items: center; gap: 10px; padding: 16px 36px; border-radius: 28px; background: #fff; color: #555570; font-weight: 600; font-size: 17px; border: 1.5px solid #D0D0E0; transition: border-color 0.2s, color 0.2s; }
+        .btn-secondary:hover { border-color: #667EEA; color: #667EEA; }
+        .btn-secondary svg { width: 18px; height: 18px; color: #667EEA; }
+
+        /* Phone Mockup */
+        .phone-mockup { width: 280px; height: 560px; border-radius: 32px; background: #1A1A2E; border: 2px solid #2A2A3E; box-shadow: 0 20px 60px rgba(102,126,234,0.2); overflow: hidden; flex-shrink: 0; }
+        .phone-status { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #12122A; color: #fff; font-size: 14px; font-weight: 600; }
+        .phone-status-icons { display: flex; gap: 6px; }
+        .phone-status-icons svg { width: 14px; height: 14px; }
+        .phone-map { position: relative; flex: 1; height: calc(100% - 38px); background: linear-gradient(135deg, #1a2332 0%, #1e2d3d 50%, #162029 100%); overflow: hidden; }
+        .map-grid { position: absolute; inset: 0; opacity: 0.15; }
+        .map-grid-line { position: absolute; background: #667EEA; }
+        .map-grid-line.h { width: 100%; height: 1px; }
+        .map-grid-line.v { width: 1px; height: 100%; }
+        .map-pin { position: absolute; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .map-pin svg { width: 18px; height: 18px; color: #fff; }
+        .map-pin.pin1 { background: #667EEA; top: 120px; left: 100px; }
+        .map-pin.pin2 { background: #32D583; top: 200px; left: 180px; }
+        .map-pin.pin3 { background: #E85A4F; top: 280px; left: 60px; width: 36px; height: 36px; }
+        .map-pin.pin3 svg { width: 16px; height: 16px; }
+        .map-pin-pulse { position: absolute; inset: -6px; border-radius: 50%; border: 2px solid currentColor; opacity: 0.3; animation: pulse 2s infinite; }
+        .pin1 .map-pin-pulse { color: #667EEA; }
+        .pin2 .map-pin-pulse { color: #32D583; animation-delay: 0.5s; }
+        .pin3 .map-pin-pulse { color: #E85A4F; animation-delay: 1s; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 0.3; } 100% { transform: scale(1.8); opacity: 0; } }
+
+        /* ── Features ── */
+        .features { padding: 80px 120px; display: flex; flex-direction: column; align-items: center; gap: 48px; background: #fff; }
+        .section-header { text-align: center; }
+        .section-label { font-size: 13px; font-weight: 700; color: #667EEA; letter-spacing: 2px; margin-bottom: 16px; }
+        .section-title { font-size: 40px; font-weight: 700; letter-spacing: -1px; margin-bottom: 16px; }
+        .section-sub { font-size: 18px; color: #555570; }
+        .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; }
+        .feature-card { padding: 32px; border-radius: 20px; border: 1px solid; display: flex; flex-direction: column; gap: 20px; transition: transform 0.2s, box-shadow 0.2s; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+        .feature-card.c1 { background: #F8F9FF; border-color: #E8E8F5; }
+        .feature-card.c2 { background: #F0FFF5; border-color: #D0F0DD; }
+        .feature-card.c3 { background: #FFF8F0; border-color: #F0E0D0; }
+        .feature-card.c4 { background: #F5F0FF; border-color: #E0D8F5; }
+        .feature-card.c5 { background: #FFFBF0; border-color: #F0E8D0; }
+        .feature-card.c6 { background: #F0F8FF; border-color: #D0E8F5; }
+        .feature-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; }
+        .feature-icon svg { width: 28px; height: 28px; color: #fff; }
+        .feature-icon.i1 { background: linear-gradient(135deg, #667EEA, #764BA2); }
+        .feature-icon.i2 { background: linear-gradient(135deg, #32D583, #059669); }
+        .feature-icon.i3 { background: linear-gradient(135deg, #E85A4F, #DC2626); }
+        .feature-icon.i4 { background: linear-gradient(135deg, #8B5CF6, #6D28D9); }
+        .feature-icon.i5 { background: linear-gradient(135deg, #F59E0B, #D97706); }
+        .feature-icon.i6 { background: linear-gradient(135deg, #0EA5E9, #0369A1); }
+        .feature-card h3 { font-size: 20px; font-weight: 600; }
+        .feature-card p { font-size: 15px; color: #555570; line-height: 1.6; }
+
+        /* ── Privacy Section ── */
+        .privacy-section { display: flex; align-items: center; padding: 80px 120px; gap: 60px; background: linear-gradient(135deg, #1A1A2E, #2D1B69); color: #fff; }
+        .privacy-left { flex: 1; display: flex; flex-direction: column; gap: 24px; }
+        .privacy-left .section-label { color: #667EEA; }
+        .privacy-left h2 { font-size: 40px; font-weight: 700; letter-spacing: -1px; line-height: 1.2; }
+        .privacy-left p { font-size: 17px; color: #A0A0C0; line-height: 1.7; }
+        .privacy-right { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+        .promise { display: flex; align-items: center; gap: 16px; padding: 20px 24px; border-radius: 16px; background: rgba(255,255,255,0.06); }
+        .promise svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .promise span { font-size: 16px; font-weight: 500; }
+
+        /* ── Final CTA ── */
+        .final-cta { display: flex; flex-direction: column; align-items: center; padding: 100px 120px; gap: 32px; background: linear-gradient(180deg, #F0E6FF, #EEF0FF 50%, #F8F9FF); }
+        .final-cta h2 { font-size: 44px; font-weight: 700; text-align: center; letter-spacing: -1.2px; line-height: 1.2; max-width: 700px; }
+        .final-cta > p { font-size: 19px; color: #555570; text-align: center; line-height: 1.6; }
+        .store-buttons { display: flex; gap: 16px; align-items: center; }
+        .store-btn { display: flex; align-items: center; gap: 12px; padding: 16px 32px; border-radius: 28px; background: #1A1A2E; color: #fff; box-shadow: 0 8px 24px rgba(26,26,46,0.25); transition: transform 0.2s; }
+        .store-btn:hover { transform: translateY(-2px); }
+        .store-btn svg { width: 20px; height: 20px; }
+        .store-btn-text small { display: block; font-size: 10px; font-weight: 500; color: #A0A0C0; letter-spacing: 1px; }
+        .store-btn-text span { font-size: 17px; font-weight: 600; }
+
+        /* ── Footer ── */
+        .footer { padding: 48px 120px; background: #0B0B14; color: #A0A0B0; }
+        .footer-top { display: flex; justify-content: space-between; margin-bottom: 40px; }
+        .footer-brand { display: flex; flex-direction: column; gap: 12px; }
+        .footer-logo { display: flex; align-items: center; gap: 10px; }
+        .footer-logo-icon { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #667EEA, #764BA2); display: flex; align-items: center; justify-content: center; }
+        .footer-logo-icon svg { width: 14px; height: 14px; color: #fff; }
+        .footer-logo span { font-size: 18px; font-weight: 700; color: #fff; }
+        .footer-tagline { font-size: 14px; color: #555570; }
+        .footer-links { display: flex; gap: 64px; }
+        .footer-col h4 { font-size: 13px; font-weight: 700; color: #888890; letter-spacing: 1px; margin-bottom: 12px; }
+        .footer-col a { display: block; font-size: 14px; color: #A0A0B0; margin-bottom: 10px; transition: color 0.2s; }
+        .footer-col a:hover { color: #667EEA; }
+        .footer-divider { height: 1px; background: #1A1A2E; margin-bottom: 24px; }
+        .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+        .footer-bottom p { font-size: 13px; color: #444450; }
+        .footer-lang { display: flex; gap: 16px; align-items: center; font-size: 13px; }
+        .footer-lang a { color: #A0A0B0; font-weight: 500; }
+        .footer-lang a.active { color: #667EEA; }
+        .footer-lang span { color: #444450; }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .header { padding: 16px 30px; }
+            .hero { padding: 60px 40px; }
+            .hero h1 { font-size: 40px; }
+            .features { padding: 60px 40px; }
+            .feature-grid { grid-template-columns: repeat(2, 1fr); }
+            .privacy-section { padding: 60px 40px; flex-direction: column; }
+            .final-cta { padding: 60px 40px; }
+            .footer { padding: 40px; }
+            .footer-links { gap: 40px; }
+        }
+        @media (max-width: 768px) {
+            .header { padding: 16px 20px; }
+            .nav a:not(.btn-download) { display: none; }
+            .hero { padding: 48px 20px; }
+            .hero h1 { font-size: 32px; }
+            .hero p.subtitle { font-size: 16px; }
+            .hero-ctas { flex-direction: column; width: 100%; }
+            .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+            .phone-mockup { width: 240px; height: 480px; }
+            .features { padding: 48px 20px; }
+            .section-title { font-size: 28px; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .privacy-section { padding: 48px 20px; }
+            .privacy-left h2 { font-size: 28px; }
+            .final-cta { padding: 48px 20px; }
+            .final-cta h2 { font-size: 28px; }
+            .store-buttons { flex-direction: column; width: 100%; }
+            .store-btn { width: 100%; justify-content: center; }
+            .footer { padding: 32px 20px; }
+            .footer-top { flex-direction: column; gap: 32px; }
+            .footer-links { gap: 32px; }
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>到哪了 DaoNaLe</h1>
-        <p>Family Location, One Tap Away</p>
-        <p>家人守候，一键知道</p>
-    </header>
-    <div class="links">
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="privacy-zh.html">隐私政策</a>
-        <a href="terms.html">Terms of Service</a>
-        <a href="terms-zh.html">用户协议</a>
+
+<!-- Header -->
+<header class="header">
+    <a href="/" class="logo">
+        <div class="logo-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span class="logo-text">DaoNaLe</span>
+    </a>
+    <nav class="nav">
+        <a href="#features">Features</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#download">Download</a>
+        <a href="#faq">FAQ</a>
+        <a href="#download" class="btn-download">Download</a>
+    </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        <span>Family Location Sharing App</span>
     </div>
-    <footer>
+    <h1>Know Where Your<br>Loved Ones Are</h1>
+    <p class="subtitle">Real-time location sharing for families and teams.<br>Battery-friendly. Privacy-first. Works worldwide.</p>
+    <div class="hero-ctas">
+        <a href="#download" class="btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Free
+        </a>
+        <a href="#features" class="btn-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Learn More
+        </a>
+    </div>
+
+    <!-- Phone Mockup -->
+    <div class="phone-mockup">
+        <div class="phone-status">
+            <span>9:41</span>
+            <div class="phone-status-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#32D583" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg>
+            </div>
+        </div>
+        <div class="phone-map">
+            <div class="map-grid">
+                <div class="map-grid-line h" style="top:20%"></div>
+                <div class="map-grid-line h" style="top:40%"></div>
+                <div class="map-grid-line h" style="top:60%"></div>
+                <div class="map-grid-line h" style="top:80%"></div>
+                <div class="map-grid-line v" style="left:25%"></div>
+                <div class="map-grid-line v" style="left:50%"></div>
+                <div class="map-grid-line v" style="left:75%"></div>
+            </div>
+            <div class="map-pin pin1">
+                <div class="map-pin-pulse"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="map-pin pin2">
+                <div class="map-pin-pulse"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="map-pin pin3">
+                <div class="map-pin-pulse"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+    <div class="section-header">
+        <div class="section-label">CORE FEATURES</div>
+        <h2 class="section-title">Everything Your Family Needs</h2>
+        <p class="section-sub">Simple, reliable, and respectful of your privacy</p>
+    </div>
+    <div class="feature-grid">
+        <div class="feature-card c1">
+            <div class="feature-icon i1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h3>Real-Time Location</h3>
+            <p>See your family members on the map in real time. Always know they're safe.</p>
+        </div>
+        <div class="feature-card c2">
+            <div class="feature-icon i2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>Three-Level Privacy</h3>
+            <p>Precise, Fuzzy, or Frozen — you control exactly how much to share.</p>
+        </div>
+        <div class="feature-card c3">
+            <div class="feature-icon i3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <h3>SOS Emergency</h3>
+            <p>Long-press to send an emergency alert with your live location to all circle members.</p>
+        </div>
+        <div class="feature-card c4">
+            <div class="feature-icon i4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            </div>
+            <h3>Geofence Alerts</h3>
+            <p>Get notified when family members arrive at or leave locations like home and school.</p>
+        </div>
+        <div class="feature-card c5">
+            <div class="feature-icon i5">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/><path d="M7 12h4"/></svg>
+            </div>
+            <h3>Battery-Friendly</h3>
+            <p>Smart location strategy — high-frequency when active, low-frequency in background. No battery drain.</p>
+        </div>
+        <div class="feature-card c6">
+            <div class="feature-icon i6">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <h3>Works Worldwide</h3>
+            <p>AMap for China, OSM/Google Maps internationally. One app, global coverage.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Privacy -->
+<section class="privacy-section" id="privacy">
+    <div class="privacy-left">
+        <div class="section-label">PRIVACY COMMITMENT</div>
+        <h2>Your Location,<br>Your Rules</h2>
+        <p>We believe location sharing should empower, not surveil. That's why privacy controls are at the heart of DaoNaLe.</p>
+    </div>
+    <div class="privacy-right">
+        <div class="promise">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#E85A4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span>We NEVER sell your location data</span>
+        </div>
+        <div class="promise">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#E85A4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span>We NEVER track you for advertising</span>
+        </div>
+        <div class="promise">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#32D583" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>GDPR, PIPL, and CCPA compliant</span>
+        </div>
+        <div class="promise">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#32D583" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Leave any circle anytime — instant stop</span>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta" id="download">
+    <h2>Ready to Keep Your<br>Family Connected?</h2>
+    <p>Download DaoNaLe for free. No ads. No data selling. Just peace of mind.</p>
+    <div class="store-buttons">
+        <a href="#" class="store-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <div class="store-btn-text">
+                <small>GET IT ON</small>
+                <span>Google Play</span>
+            </div>
+        </a>
+        <a href="#" class="store-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <div class="store-btn-text">
+                <small>DOWNLOAD ON</small>
+                <span>App Store</span>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-top">
+        <div class="footer-brand">
+            <div class="footer-logo">
+                <div class="footer-logo-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <span>DaoNaLe</span>
+            </div>
+            <div class="footer-tagline">Family Location, One Tap Away</div>
+        </div>
+        <div class="footer-links">
+            <div class="footer-col">
+                <h4>PRODUCT</h4>
+                <a href="#features">Features</a>
+                <a href="#download">Download</a>
+            </div>
+            <div class="footer-col">
+                <h4>LEGAL</h4>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <div class="footer-col">
+                <h4>CONTACT</h4>
+                <a href="mailto:daonale.app@gmail.com">daonale.app@gmail.com</a>
+                <a href="https://github.com/fenghc66">GitHub</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
         <p>&copy; 2026 Hongchen Feng. All rights reserved.</p>
-        <p>Contact: daonale.app@gmail.com</p>
-    </footer>
+        <div class="footer-lang">
+            <a href="#" class="active">English</a>
+            <span>|</span>
+            <a href="#">中文</a>
+        </div>
+    </div>
+</footer>
+
 </body>
 </html>
